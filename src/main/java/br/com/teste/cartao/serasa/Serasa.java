@@ -1,6 +1,6 @@
 //http://www.java2s.com/Code/Java/PDF-RTF/PdfPTableWriteSelectedRows.htm
 
-package br.com.teste.cartao;
+package br.com.teste.cartao.serasa;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -68,6 +68,9 @@ import br.com.teste.cartao.serasa.entidade.I22000;
 import br.com.teste.cartao.serasa.entidade.I22001;
 import br.com.teste.cartao.serasa.entidade.I22002;
 import br.com.teste.cartao.serasa.entidade.I22003;
+import br.com.teste.cartao.serasa.entidade.I42000;
+import br.com.teste.cartao.serasa.entidade.I52000;
+import br.com.teste.cartao.serasa.entidade.I52099;
 import br.com.teste.cartao.serasa.entidade.P002;
 import br.com.teste.cartao.serasa.entidade.T999;
 import br.com.teste.cartao.serasa.modelo.Modelo;
@@ -92,8 +95,12 @@ import br.com.teste.cartao.serasa.modelo.ModeloI22000;
 import br.com.teste.cartao.serasa.modelo.ModeloI22001;
 import br.com.teste.cartao.serasa.modelo.ModeloI22002;
 import br.com.teste.cartao.serasa.modelo.ModeloI22003;
+import br.com.teste.cartao.serasa.modelo.ModeloI42000;
+import br.com.teste.cartao.serasa.modelo.ModeloI52000;
+import br.com.teste.cartao.serasa.modelo.ModeloI52099;
 import br.com.teste.cartao.serasa.modelo.ModeloP002;
 import br.com.teste.cartao.serasa.modelo.ModeloT999;
+import br.com.teste.cartao.serasa.util.Arco;
 import br.com.teste.cartao.serasa.util.Util;
 
 public class Serasa {
@@ -166,19 +173,14 @@ public class Serasa {
 
         	HttpPost post = new HttpPost("https://mqlinuxext.serasa.com.br/Homologa/consultahttps");
 
-        	String documento = "000000004933419";
+        	//String documento = "000000004933419"; // 00004933419
+        	String documento = "000000006280005"; // 00006280005
 
-        	//0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111122222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222223333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111
-        	//0000000000000000000000000000000000000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111110000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111
-        	//0000000000000000000000000000000000123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123451234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345
-        	//PF
-        	//String p = "71645060AdvxH19@        B49C      000000000000272FC     FI                   S99SINIAN                               N                                                                                                                                                                                                                                                                                                                  P002RSPU                                                                                                           I00100RS                                                                                                           T999";
-
+        	//0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111122222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222223333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111100000
+        	//0000000000000000000000000000000000000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111100000
+        	//0000000000000000000000000000000000123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234512345
         	//PF - Cheque sem fundo
-        	//String p = "71645060AdvxH19@        B49C      000000006280005FC     FI                   S99SINIAN                               N                                                                                                                                                                                                                                                                                                                  P002RSPU                                                                                                           I00100RS                                                                                                           T999";
-        	String p = "71645060AdvxH19@        B49C      "+documento+"FC     FI                   S99SINIAN                               N                                                                                                                                                                                                                                                                                                                  P002RSPU                                                                                                           I00100RS                                                                                                           T999";
-
-
+        	String p = "71645060AdvxH19@        B49C      "+documento+"FC     FI                   S99SINIAN                               N                                                                                                                                                                                                                                                                                                                  P002RSPU                                                                                                           I00100RS SRSCP                     S                                                                               T999";
         	//PJ
         	//String p = "71645060AdvxH19@        B49C      000002220000154JC     FI                   S99SINIAN                               N                                                                                                                                                                                                                                                                                                                  P002RSPU                                                                                                           I00100R                                                                                                            T999";
         	List<NameValuePair> urlParameters = new ArrayList<>();
@@ -205,9 +207,18 @@ public class Serasa {
 		I12000 resumoAcoesJudiciais_I12000 = new I12000();
 		// I140 - Resumo de RESTRIÇÃO FINANCEIRA - REFIN
 		I14000 resumoREFIN_I14000 = new I14000();
+
+		// I170 - Detalhe de CCF (Cheques sem Fundos - BB)
+		I17001 chequeSemFundo_I17001 = null;
+		I17002 chequeSemFundo_I17002 = null;
+
 		// I220 - Resumo de PENDENCIA FINANCEIRA - PEFIN
 		I22000 resumoPEFIN_I22000 = null;
-
+		// I420 - CONCENTRE SCORING
+		I42000 concentreScoring_I42000 = new I42000();
+		// I520 - PARTICIPACAO SOCIETARIA
+		I52000 participacaoSocietaria_I52000 = new I52000();
+		I52099 participacaoSocietaria_I52099 = new I52099();
 
 		// DETALHES
 		ArrayList<I11001> listI11001 = new ArrayList<I11001>();
@@ -215,8 +226,8 @@ public class Serasa {
 		ArrayList<I12002> listI12002 = new ArrayList<I12002>();
 		ArrayList<I14001> listI14001 = new ArrayList<I14001>();
 		ArrayList<I14002> listI14002 = new ArrayList<I14002>();
-		ArrayList<I17001> listI17001 = new ArrayList<I17001>();
-		ArrayList<I17002> listI17002 = new ArrayList<I17002>();
+		//ArrayList<I17001> listI17001 = new ArrayList<I17001>();
+		//ArrayList<I17002> listI17002 = new ArrayList<I17002>();
 
 		// I22001 - Detalhe da PENDENCIA FINANCEIRA - PEFIN
 		I22001 detalhePEFIN_I22001 = null;
@@ -407,21 +418,18 @@ public class Serasa {
 
 			    	ModeloI17001 modeloI17001 = new ModeloI17001();
 					List<ModeloI17001> listaModeloI17001 = modeloI17001.getListModelo();
-					I17001 i17001 = new I17001();
-					popularObjeto(" ".concat(linha), i17001 , listaModeloI17001.toArray());
+					chequeSemFundo_I17001 = new I17001();
+					popularObjeto(" ".concat(linha), chequeSemFundo_I17001 , listaModeloI17001.toArray());
 					System.out.println(listaModeloI17001.get(0).getDescricao().concat(" ").concat(listaModeloI17001.get(1).getDescricao()));
-					listI17001.add(i17001);
-
 			    }
 
 			    if(registro.contentEquals("I17002")) {
 
 			    	ModeloI17002 modeloI17002 = new ModeloI17002();
 					List<ModeloI17002> listaModeloI17002 = modeloI17002.getListModelo();
-					I17002 i17002 = new I17002();
-					popularObjeto(" ".concat(linha), i17002 , listaModeloI17002.toArray());
+					chequeSemFundo_I17002 = new I17002();
+					popularObjeto(" ".concat(linha), chequeSemFundo_I17002 , listaModeloI17002.toArray());
 					System.out.println(listaModeloI17002.get(0).getDescricao().concat(" ").concat(listaModeloI17002.get(1).getDescricao()));
-					listI17002.add(i17002);
 
 			    }
 
@@ -463,6 +471,33 @@ public class Serasa {
 					System.out.println(listaModeloI22003.get(0).getDescricao().concat(" ").concat(listaModeloI22003.get(1).getDescricao()));
 	    		}
 
+			    if(registro.equals("I42000")){
+
+			    	ModeloI42000 modeloI42000 = new ModeloI42000();
+					List<ModeloI42000> listaModeloI42000 = modeloI42000.getListModelo();
+					concentreScoring_I42000 = new I42000();
+					popularObjeto(" ".concat(linha), concentreScoring_I42000, listaModeloI42000.toArray());
+					System.out.println(listaModeloI42000.get(0).getDescricao().concat(" ").concat(listaModeloI42000.get(1).getDescricao()));
+	    		}
+
+			    if(registro.equals("I52000")){
+
+			    	ModeloI52000 modeloI52000 = new ModeloI52000();
+					List<ModeloI52000> listaModeloI52000 = modeloI52000.getListModelo();
+					participacaoSocietaria_I52000 = new I52000();
+					popularObjeto(" ".concat(linha), participacaoSocietaria_I52000, listaModeloI52000.toArray());
+					System.out.println(listaModeloI52000.get(0).getDescricao().concat(" ").concat(listaModeloI52000.get(1).getDescricao()));
+	    		}
+
+			    if(registro.equals("I52099")){
+
+			    	ModeloI52099 modeloI52099 = new ModeloI52099();
+					List<ModeloI52099> listaModeloI52099 = modeloI52099.getListModelo();
+					participacaoSocietaria_I52099 = new I52099();
+					popularObjeto(" ".concat(linha), participacaoSocietaria_I52099, listaModeloI52099.toArray());
+					System.out.println(listaModeloI52099.get(0).getDescricao().concat(" ").concat(listaModeloI52099.get(1).getDescricao()));
+	    		}
+
 			    linhaResposa = linhaResposa.substring(linha.length());
 
 	    	}catch(Exception e) {
@@ -476,7 +511,6 @@ public class Serasa {
 	    System.out.println("FIM DO PROCESSAMENTO DO ARQUIVO!");
 
 	    System.out.println(texto);
-
 
 		Document document = new Document(PageSize.A4);
 
@@ -510,7 +544,7 @@ public class Serasa {
 			Font fontCabecalhoDetalhe = new Font(Font.HELVETICA, 16, Font.NORMAL, colorFontCabecalhoDetalhe);
 			Font fontResumo = new Font(Font.HELVETICA, 12, Font.NORMAL, colorFontResumo);
 			Font fontTituloColuna = new Font(Font.HELVETICA, 12, Font.NORMAL, colorTituloColuna);
-			Font fontDadoColuna = new Font(Font.HELVETICA, 10, Font.NORMAL, colorDadoColuna);
+			Font fontDadoColuna = new Font(Font.HELVETICA, 8, Font.NORMAL, colorDadoColuna);
 			Font fontTituloDocumento = new Font(Font.HELVETICA, 18, Font.COURIER, Color.decode("#C3A27A"));
 			Font fontData = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.decode("#8C8C8C"));
 			Font fontQuadroChancePagamento = new Font(Font.HELVETICA, 14, Font.COURIER, Color.decode("#FFFFFF"));
@@ -543,7 +577,7 @@ public class Serasa {
             PdfPTable tableSeparacao = new PdfPTable(1);
 			PdfPCell cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -553,7 +587,7 @@ public class Serasa {
 			tableTituloData.setWidths(new int[] { 50, 50});
 			PdfPCell cellTituloData = new PdfPCell();
 			cellTituloData.setBorderColor(colorBorder);
-			cellTituloData.setMinimumHeight(30f);
+			cellTituloData.setMinimumHeight(25f);
 			cellTituloData.setBorder(0);
 			cellTituloData.setColspan(1);
 			cellTituloData.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -571,7 +605,7 @@ public class Serasa {
             tableSeparacao = new PdfPTable(1);
 			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -583,7 +617,7 @@ public class Serasa {
 			PdfPCell cellCabecalho = new PdfPCell(new Phrase("Identificação", fontCabecalho));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
 			cellCabecalho.setColspan(4);
@@ -592,7 +626,7 @@ public class Serasa {
 			PdfPCell cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColuna);
@@ -608,7 +642,7 @@ public class Serasa {
 			PdfPCell cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -624,7 +658,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Status do Documento", fontCabecalho));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
 			cellCabecalho.setColspan(4);
@@ -633,7 +667,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -646,7 +680,7 @@ public class Serasa {
             tableSeparacao = new PdfPTable(1);
 			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -658,7 +692,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Anotações Negativas", fontCabecalho));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
 			cellCabecalho.setColspan(5);
@@ -667,7 +701,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Resumo", fontResumo));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(20f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundResumo);
 			cellCabecalho.setColspan(5);
@@ -676,7 +710,7 @@ public class Serasa {
 			cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColuna);
@@ -693,34 +727,58 @@ public class Serasa {
 
 			// Linha 1
 			// RESUMO PENDENCIAS FINANCIEIRA - PEFIN
-			cellDadoColuna = new PdfPCell();
-			cellDadoColuna.setPaddingLeft(5f);
-			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
-			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase("Pendências Comerciais (PEFIN)", fontDadoColuna));
-			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(resumoPEFIN_I22000.getSeq05_qtde_total()), fontDadoColuna));
-			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumo(resumoPEFIN_I22000.getSeq03_data_inicial()).concat(" a ").concat(new Util().formataDataResumo(resumoPEFIN_I22000.getSeq04_data_final())), fontDadoColuna));
-			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formatarValorMonetario(resumoPEFIN_I22000.getSeq06_valor()), fontDadoColuna));
-			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formataTexto(resumoPEFIN_I22000.getSeq08_origem()), fontDadoColuna));
-			tableAnotacoesNegativas.addCell(cellDadoColuna);
+			if(resumoPEFIN_I22000!=null) {
+				cellDadoColuna = new PdfPCell();
+				cellDadoColuna.setPaddingLeft(5f);
+				cellDadoColuna.setBorderColor(colorBorder);
+				cellDadoColuna.setMinimumHeight(25f);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase("Pendências Comerciais (PEFIN)", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(resumoPEFIN_I22000.getSeq05_qtde_total()), fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumoInicialFinal(resumoPEFIN_I22000.getSeq03_data_inicial(),resumoPEFIN_I22000.getSeq04_data_final()), fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cellDadoColuna.setPhrase(new Phrase(new Util().formatarValorMonetario(resumoPEFIN_I22000.getSeq06_valor()), fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cellDadoColuna.setPhrase(new Phrase(new Util().formataTexto(resumoPEFIN_I22000.getSeq08_origem()), fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+			} else {
+				cellDadoColuna = new PdfPCell();
+				cellDadoColuna.setPaddingLeft(5f);
+				cellDadoColuna.setBorderColor(colorBorder);
+				cellDadoColuna.setMinimumHeight(25f);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase("Pendências Comerciais (PEFIN)", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase("NADA CONSTA", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+				cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+				tableAnotacoesNegativas.addCell(cellDadoColuna);
+			}
 
 			// Linha 2
 			// RESUMO RESTRICAO FINANCEIRA - REFIN
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -728,7 +786,7 @@ public class Serasa {
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(resumoREFIN_I14000.getSeq05_qtde_total()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumo(resumoREFIN_I14000.getSeq03_data_inicial()).concat(" a ").concat(new Util().formataDataResumo(resumoREFIN_I14000.getSeq04_data_final())), fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumoInicialFinal(resumoREFIN_I14000.getSeq03_data_inicial(),resumoREFIN_I14000.getSeq04_data_final()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -744,23 +802,23 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
 			cellDadoColuna.setPhrase(new Phrase("Cheques sem fundos", fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase("NADA CONSTA", fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(chequeSemFundo_I17001.getSeq06_qtde_cheq()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumoInicialFinal(chequeSemFundo_I17001.getSeq03_data_ocorr(),chequeSemFundo_I17001.getSeq03_data_ocorr()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase("0,00", fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cellDadoColuna.setPhrase(new Phrase("-", fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().formataTexto(chequeSemFundo_I17001.getSeq09_nome_bco()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 
 			// Linha 4
@@ -768,7 +826,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -776,7 +834,7 @@ public class Serasa {
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(resumoProtestos.getSeq05_qtde_total()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumo(resumoProtestos.getSeq03_data_inicial()).concat(" a ").concat(new Util().formataDataResumo(resumoProtestos.getSeq04_data_final())) , fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumoInicialFinal(resumoProtestos.getSeq03_data_inicial(),resumoProtestos.getSeq04_data_final()) , fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -792,7 +850,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -800,7 +858,7 @@ public class Serasa {
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setPhrase(new Phrase(new Util().removeZerosEsquerda(resumoAcoesJudiciais_I12000.getSeq05_qtde_total()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
-			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumo(resumoAcoesJudiciais_I12000.getSeq03_data_inicial()).concat(" a ").concat(new Util().formataDataResumo(resumoAcoesJudiciais_I12000.getSeq04_data_final())), fontDadoColuna));
+			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataResumoInicialFinal(resumoAcoesJudiciais_I12000.getSeq03_data_inicial(),resumoAcoesJudiciais_I12000.getSeq04_data_final()), fontDadoColuna));
 			tableAnotacoesNegativas.addCell(cellDadoColuna);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -816,7 +874,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -840,7 +898,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -864,7 +922,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -888,7 +946,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -922,7 +980,7 @@ public class Serasa {
     			cellCabecalho = new PdfPCell(new Phrase("Pendências Comerciais (PEFIN)", fontCabecalhoDetalhe));
     			cellCabecalho.setPaddingLeft(5f);
     			cellCabecalho.setBorderColor(colorBorder);
-    			cellCabecalho.setMinimumHeight(30f);
+    			cellCabecalho.setMinimumHeight(25f);
     			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
     			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
     			cellCabecalho.setColspan(7);
@@ -931,7 +989,7 @@ public class Serasa {
     			cellTituloColuna = new PdfPCell();
     			cellTituloColuna.setPaddingLeft(5f);
     			cellTituloColuna.setBorderColor(colorBorder);
-    			cellTituloColuna.setMinimumHeight(30f);
+    			cellTituloColuna.setMinimumHeight(25f);
     			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
     			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
     			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColunaDetalhe);
@@ -952,40 +1010,55 @@ public class Serasa {
     			cellTituloColuna.setPhrase(new Phrase("Local", fontTituloColuna));
     			tablePendenciasComerciais.addCell(cellTituloColuna);
 
+    			cellDadoColuna = new PdfPCell();
+    			cellDadoColuna.setPaddingLeft(5f);
+    			cellDadoColuna.setBorderColor(colorBorder);
+    			cellDadoColuna.setMinimumHeight(25f);
+    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+    			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
+    			// CONTRATO
+    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22001.getSeq09_contrato(), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			// MODALIDADE
+    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22002.getSeq08_modalidade(), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			// EMPRESA
+    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22003.getSeq04_nome(), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			//DATA
+    			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataPadrao(detalhePEFIN_I22001.getSeq03_data_ocorr()), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			//VALOR
+    			cellDadoColuna.setPhrase(new Phrase(new Util().formatarValorMonetario(detalhePEFIN_I22001.getSeq05_valor()), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+    			//AVALISTA
+    			cellDadoColuna.setPhrase(new Phrase(new Util().retornaTraco(detalhePEFIN_I22001.getSeq08_principal()), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			// LOCAL
+    			cellDadoColuna.setPhrase(new Phrase(new Util().retornaTraco(detalhePEFIN_I22001.getSeq06_praca()), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
 
 
-	    			cellDadoColuna = new PdfPCell();
-	    			cellDadoColuna.setPaddingLeft(5f);
-	    			cellDadoColuna.setBorderColor(colorBorder);
-	    			cellDadoColuna.setMinimumHeight(30f);
-	    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
-	    			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
-	    			// CONTRATO
-	    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22001.getSeq09_contrato(), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			// MODALIDADE
-	    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22002.getSeq08_modalidade(), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			// EMPRESA
-	    			cellDadoColuna.setPhrase(new Phrase(detalhePEFIN_I22003.getSeq04_nome(), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			//DATA
-	    			cellDadoColuna.setPhrase(new Phrase(new Util().formataDataPadrao(detalhePEFIN_I22001.getSeq03_data_ocorr()), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			//VALOR
-	    			cellDadoColuna.setPhrase(new Phrase(new Util().formatarValorMonetario(detalhePEFIN_I22001.getSeq05_valor()), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
-	    			//AVALISTA
-	    			cellDadoColuna.setPhrase(new Phrase(new Util().retornaTraco(detalhePEFIN_I22001.getSeq08_principal()), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
-	    			// LOCAL
-	    			cellDadoColuna.setPhrase(new Phrase(new Util().retornaTraco(detalhePEFIN_I22001.getSeq06_praca()), fontDadoColuna));
-	    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			cellDadoColuna = new PdfPCell();
+    			cellDadoColuna.setPaddingLeft(5f);
+    			cellDadoColuna.setBorderColor(colorBorder);
+    			cellDadoColuna.setMinimumHeight(25f);
+    			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+    			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
+    			cellDadoColuna.setColspan(7);
+    			// CREDOR
+    			cellDadoColuna.setPhrase(new Phrase("Credor: " + new Util().formataCNPJ(detalhePEFIN_I22003.getSeq03_docto()), fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
+    			// TOTAL OCORRENCIAS:
+    			cellDadoColuna.setBackgroundColor(colorBackgroundLegenda);
+    			cellDadoColuna.setPhrase(new Phrase("Total de Ocorrências: 1 ", fontDadoColuna));
+    			tablePendenciasComerciais.addCell(cellDadoColuna);
 
 
     			document.add(tablePendenciasComerciais);
@@ -993,6 +1066,307 @@ public class Serasa {
 
             }
 
+         if(participacaoSocietaria_I52099!=null) {
+
+         // Separação
+
+            tableSeparacao = new PdfPTable(1);
+			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
+			cellSeparacao.setBorder(PdfCell.NO_BORDER);
+			cellSeparacao.setMinimumHeight(25f);
+			tableSeparacao.addCell(cellSeparacao);
+			tableSeparacao.completeRow();
+            document.add(tableSeparacao);
+
+         // participacao societaria
+
+            PdfPTable tableParticipacaoSocietaria = new PdfPTable(1);
+            tableParticipacaoSocietaria.setWidthPercentage(100);
+			cellCabecalho = new PdfPCell(new Phrase("Participação Societária", fontCabecalho));
+			cellCabecalho.setPaddingLeft(5f);
+			cellCabecalho.setBorderColor(colorBorder);
+			cellCabecalho.setMinimumHeight(25f);
+			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
+			cellCabecalho.setColspan(4);
+			tableParticipacaoSocietaria.addCell(cellCabecalho);
+
+			cellDadoColuna = new PdfPCell();
+			cellDadoColuna.setPaddingLeft(5f);
+			cellDadoColuna.setBorderColor(colorBorder);
+			cellDadoColuna.setMinimumHeight(25f);
+			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
+			cellDadoColuna.setPhrase(new Phrase(participacaoSocietaria_I52099.getSeq04_mensagem(), fontDadoColuna));
+			cellDadoColuna.setColspan(4);
+			tableParticipacaoSocietaria.addCell(cellDadoColuna);
+			tableParticipacaoSocietaria.completeRow();
+            document.add(tableParticipacaoSocietaria);
+
+         }
+
+         // Separação
+
+            tableSeparacao = new PdfPTable(1);
+			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
+			cellSeparacao.setBorder(PdfCell.NO_BORDER);
+			cellSeparacao.setMinimumHeight(25f);
+			tableSeparacao.addCell(cellSeparacao);
+			tableSeparacao.completeRow();
+            document.add(tableSeparacao);
+
+         // Serasa Score
+
+            PdfPTable tableSerasaScore = new PdfPTable(5);
+            tableSerasaScore.setWidthPercentage(100);
+            tableSerasaScore.setWidths(new int[] {31,1,21,1,41});
+            cellCabecalho = new PdfPCell(new Phrase("Serasa Score", fontCabecalho));
+            cellCabecalho.setBorder(0);
+            cellCabecalho.setPaddingLeft(5f);
+            cellCabecalho.setBorderColor(colorBorder);
+            cellCabecalho.setMinimumHeight(25f);
+            cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
+            cellCabecalho.setColspan(5);
+            tableSerasaScore.addCell(cellCabecalho);
+
+            cellTituloColuna = new PdfPCell();
+ 		    cellTituloColuna.setMinimumHeight(25f);
+ 		    cellTituloColuna.setPhrase(new Phrase("", fontTituloColuna));
+ 		    cellTituloColuna.setColspan(5);
+ 	        cellTituloColuna.setBorder(0);
+ 	        tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       // Montando a imagem
+
+ 	       List<Arco> listaArcoExterno = new ArrayList<Arco>();
+ 		   List<Arco> listaArcoInterno = new ArrayList<Arco>();
+
+ 		   BufferedImage bufferImagemSerasaScore = new BufferedImage( 800, 450, BufferedImage.TYPE_INT_RGB );
+ 		   Graphics2D graphicsSerasaScore = bufferImagemSerasaScore.createGraphics();
+ 		   graphicsSerasaScore.setBackground(Color.WHITE);
+ 		   graphicsSerasaScore.fillRect ( 0, 0, bufferImagemSerasaScore.getWidth(), bufferImagemSerasaScore.getHeight() );
+
+ 		   listaArcoExterno = calcularArco(graphicsSerasaScore, 400, 400, 300);
+ 		   listaArcoInterno = calcularArco(graphicsSerasaScore, 400, 400, 200);
+
+ 		   //Cada sessao de cor possui um tom de azul, formando um degradê, do tom mais claro para o tom mais escuro.
+ 		   //Essa peleta foi retirada desse site: https://desarrollador-android.com/material-design/diseno-material-design/estilo/color/
+ 		   String paletaCorSessaoArco[] = {
+ 					"#E3F2FD",
+ 					"#BBDEFB",
+ 					"#90CAF9",
+ 					"#64B5F6",
+ 					"#42A5F5",
+ 					"#2196F3",
+ 					"#1E88E5",
+ 					"#1976D2",
+ 					"#1565C0",
+ 					"#0D47A1"
+ 			};
+
+ 		    // Essa etapa é a resonsavel por criar a forma do arco resultante.
+ 		    // São 10 sessoes ao todo.
+
+ 			int[] poligonoX;
+ 			int[] poligonoY;
+
+ 			int j = 0;
+ 			for(int i = 0 ; i<60 ; i+=6) {
+
+ 				poligonoX = new int[] {
+ 						listaArcoExterno.get(i).getX(),
+ 						listaArcoExterno.get(i+1).getX(),
+ 						listaArcoExterno.get(i+2).getX(),
+ 						listaArcoExterno.get(i+3).getX(),
+ 						listaArcoExterno.get(i+4).getX(),
+ 						listaArcoExterno.get(i+5).getX(),
+ 						listaArcoInterno.get(i+5).getX(),
+ 						listaArcoInterno.get(i+4).getX(),
+ 						listaArcoInterno.get(i+3).getX(),
+ 						listaArcoInterno.get(i+2).getX(),
+ 						listaArcoInterno.get(i+1).getX(),
+ 						listaArcoInterno.get(i).getX(),
+
+
+ 				};
+ 				poligonoY = new int[] {
+ 						listaArcoExterno.get(i).getY(),
+ 						listaArcoExterno.get(i+1).getY(),
+ 						listaArcoExterno.get(i+2).getY(),
+ 						listaArcoExterno.get(i+3).getY(),
+ 						listaArcoExterno.get(i+4).getY(),
+ 						listaArcoExterno.get(i+5).getY(),
+ 						listaArcoInterno.get(i+5).getY(),
+ 						listaArcoInterno.get(i+4).getY(),
+ 						listaArcoInterno.get(i+3).getY(),
+ 						listaArcoInterno.get(i+2).getY(),
+ 						listaArcoInterno.get(i+1).getY(),
+ 						listaArcoInterno.get(i).getY(),
+ 				};
+
+ 				Shape shapeSessaoArco = new Polygon(poligonoX, poligonoY, poligonoX.length);
+ 				graphicsSerasaScore.draw(shapeSessaoArco);
+ 				graphicsSerasaScore.setColor(Color.decode(paletaCorSessaoArco[j++]));
+ 				graphicsSerasaScore.fill(shapeSessaoArco);
+
+ 			}
+
+ 			// Essa etapa executa o posicionamento dos valores no grafico.
+ 			java.awt.Font fontSerasaPontuacao = new java.awt.Font("Impact", Font.HELVETICA, 35);
+ 			graphicsSerasaScore.setColor(Color.BLACK);
+ 			graphicsSerasaScore.setFont(fontSerasaPontuacao);
+ 			graphicsSerasaScore.drawString("0", 75, 384);
+ 			graphicsSerasaScore.drawString("100", 55, 307);
+ 			graphicsSerasaScore.drawString("200", 95, 223);
+ 			graphicsSerasaScore.drawString("300", 162, 157);
+ 			graphicsSerasaScore.drawString("400", 250, 114);
+ 			graphicsSerasaScore.drawString("500", 365, 90);
+ 			graphicsSerasaScore.drawString("600", 492, 114);
+ 			graphicsSerasaScore.drawString("700", 576, 157);
+ 			graphicsSerasaScore.drawString("800", 642, 223);
+ 			graphicsSerasaScore.drawString("900", 685, 307);
+ 			graphicsSerasaScore.drawString("1000", 699, 384);
+
+ 		    // Desenho da flecha
+ 			int[] poligonoFlechaX = { -20, 0, +20, 0};
+ 			int[] poligonoFlechaY = { 20, 10, 20, -20};
+ 			Shape shapeFlecha = new Polygon(poligonoFlechaX, poligonoFlechaY, poligonoFlechaX.length);
+
+ 			double indice = 0.1785; // Esse valor é um ajuste por conta de diferenças de pixels, para que a flexa aponte exatamente no local certo.
+ 			int posicaoCentroX = 400;
+ 			int posicaoCentroY = 400;
+ 			int raio = 170;
+
+ 			int score = Integer.parseInt(concentreScoring_I42000.getSeq05_pontuacao());
+
+ 			// Essa etapa desenha o número do score na imagem.
+ 			String textScore = String.valueOf(score);
+ 			java.awt.Font fontSerasaScore = new java.awt.Font("Helvetica", Font.HELVETICA, 74);
+ 			graphicsSerasaScore.setColor(Color.decode("#1394D6"));
+ 			graphicsSerasaScore.setFont(fontSerasaScore);
+ 			int posicao = (bufferImagemSerasaScore.getWidth()/2) - ((textScore.length()*36)/2);
+ 			graphicsSerasaScore.drawString(textScore, posicao, posicaoCentroY-5);
+
+ 			int graus = (int) (180 - (score * indice)); // quantos graus por indice
+ 			double angulo = ((score/1000f) * 180) + 270; // angulo que a flecha será direcionada
+ 			double xd = Math.cos(1 * Math.PI / 180 * -graus); // coordenada onde a fecha ficará no arco.
+ 			double yd = Math.sin(1 * Math.PI / 180 * -graus); // coordenada onde a fecha ficará no arco.
+ 			int x = (int) (xd * raio + posicaoCentroX); // correcao da posicao da flexa dentro da imagem.
+ 			int y = (int) (yd * raio + posicaoCentroY); // correcao da posicao da flexa dentro da imagem.
+
+ 			AffineTransform transform = new AffineTransform();
+ 			graphicsSerasaScore.setTransform(transform);
+ 			graphicsSerasaScore.setColor(Color.BLACK);
+ 			graphicsSerasaScore.translate(x, y);
+ 			graphicsSerasaScore.rotate(Math.toRadians(angulo));
+ 			graphicsSerasaScore.scale(1.5, 1.5);
+ 			graphicsSerasaScore.fill(shapeFlecha);
+ 			graphicsSerasaScore.dispose();
+
+ 		   Image serasaScoreImage = Image.getInstance(bufferImagemSerasaScore, null);
+ 		   serasaScoreImage.scalePercent(20);
+
+            cellTituloColuna = new PdfPCell(serasaScoreImage);
+ 	       cellTituloColuna.setBorder(0);
+ 	       tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       cellTituloColuna = new PdfPCell();
+ 	       cellTituloColuna.setBorder(0);
+ 	       tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       cellTituloColuna.setPhrase(new Phrase("17,41% \nChance de \nPagamento", fontQuadroChancePagamento));
+ 	       cellTituloColuna.setBackgroundColor(colorQuadroChancePagamento);
+ 	       cellTituloColuna.setPadding(10f);
+ 	       cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+ 	       cellTituloColuna.setHorizontalAlignment(Element.ALIGN_CENTER);
+ 	       cellTituloColuna.setBorder(0);
+ 	       tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       cellTituloColuna = new PdfPCell();
+ 	       cellTituloColuna.setBorder(0);
+ 	       tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       cellTituloColuna = new PdfPCell(new Phrase("A chance de um consumidor, com score entre 201 e 300, pagar seus compromissos financeiros nos próximos 12 meses é de 17,41%", fontQuadroChancePagamentoDescricao));
+ 	       cellTituloColuna.setPaddingLeft(20f);
+ 	       cellTituloColuna.setBorderColorTop(colorQuadroChancePagamento);
+ 	       cellTituloColuna.setBorderColorBottom(colorQuadroChancePagamento);
+ 	       cellTituloColuna.setBorderColorLeft(colorQuadroChancePagamento);
+ 	       cellTituloColuna.setBorderColorRight(colorQuadroChancePagamento);
+ 	       cellTituloColuna.setBorderWidthTop(1f);
+ 	       cellTituloColuna.setBorderWidthBottom(1f);
+ 	       cellTituloColuna.setBorderWidthLeft(1f);
+ 	       cellTituloColuna.setBorderWidthRight(1f);
+ 	       cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
+ 	       cellTituloColuna.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+ 	       tableSerasaScore.addCell(cellTituloColuna);
+
+ 	       tableSerasaScore.completeRow();
+           document.add(tableSerasaScore);
+
+           //document.newPage();
+
+           // Separação
+
+           tableSeparacao = new PdfPTable(1);
+			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
+			cellSeparacao.setBorder(PdfCell.NO_BORDER);
+			cellSeparacao.setMinimumHeight(25f);
+			tableSeparacao.addCell(cellSeparacao);
+			tableSeparacao.completeRow();
+           document.add(tableSeparacao);
+
+           // Informacao geral.
+
+  			PdfPTable tableInformacoesGerais = new PdfPTable(1);
+  			tableInformacoesGerais.setWidthPercentage(100);
+  			String textoInformacoesGerais = "A decisão da aprovação ou não do crédito é de exclusiva responsabilidade do concedente. As informações prestadas pela Serasa Experian têm como objetivo subsidiar essas decisões e, em hipótese alguma, devem ser utilizadas como justificativa, pelo concedente do crédito, para a tomada da referida decisão.";
+  			cellCabecalho = new PdfPCell(new Phrase(textoInformacoesGerais, fontDadoColuna));
+  			cellCabecalho.setPadding(10f);
+  			cellCabecalho.setBorderColor(colorBorder);
+  			cellCabecalho.setMinimumHeight(25f);
+  			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
+  			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
+  			tableInformacoesGerais.addCell(cellCabecalho);
+  			tableInformacoesGerais.completeRow();
+  			document.add(tableInformacoesGerais);
+
+  	        // Separação
+
+            tableSeparacao = new PdfPTable(1);
+			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
+			cellSeparacao.setBorder(PdfCell.NO_BORDER);
+			cellSeparacao.setMinimumHeight(25f);
+			tableSeparacao.addCell(cellSeparacao);
+			tableSeparacao.completeRow();
+            document.add(tableSeparacao);
+
+  			// Separação
+  			/*
+  			tableSeparacao = new PdfPTable(1);
+			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
+			cellSeparacao.setBorder(PdfCell.NO_BORDER);
+			cellSeparacao.setMinimumHeight(670f);
+			tableSeparacao.addCell(cellSeparacao);
+			tableSeparacao.completeRow();
+            document.add(tableSeparacao);
+			*/
+
+            // Rodapé
+
+            tableInformacoesGerais = new PdfPTable(1);
+			tableInformacoesGerais.setWidthPercentage(100);
+  			textoInformacoesGerais = "As informações acima, de uso exclusivo do destinatário, são protegidas por sigilo contratual. Sua utilização por outra pessoa, ou para finalidade diversa da contratada, caracteriza ilícito civil, tornando a prova inútil para o processo.";
+  			cellCabecalho = new PdfPCell(new Phrase(textoInformacoesGerais, fontDadoColuna));
+  			cellCabecalho.setPadding(10f);
+  			cellCabecalho.setBorder(0);
+  			cellCabecalho.setMinimumHeight(25f);
+  			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
+  			cellCabecalho.setBackgroundColor(colorBackgroundDadoColuna);
+  			tableInformacoesGerais.addCell(cellCabecalho);
+  			tableInformacoesGerais.completeRow();
+  			document.add(tableInformacoesGerais);
 
             /*
             // PENDENCIAS BANCARIAS - REFIN = RESTRICOES FINANCEIRAS
@@ -1003,7 +1377,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Pendências Bancárias", fontCabecalhoDetalhe));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
 			cellCabecalho.setColspan(7);
@@ -1012,7 +1386,7 @@ public class Serasa {
 			cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColunaDetalhe);
@@ -1038,7 +1412,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1066,7 +1440,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1094,7 +1468,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1122,7 +1496,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1150,7 +1524,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1180,7 +1554,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setColspan(7);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1195,7 +1569,7 @@ public class Serasa {
             tableSeparacao = new PdfPTable(1);
 			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -1208,7 +1582,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Cheques Sem Fundo", fontCabecalhoDetalhe));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
 			cellCabecalho.setColspan(9);
@@ -1217,7 +1591,7 @@ public class Serasa {
 			cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColunaDetalhe);
@@ -1247,7 +1621,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1277,7 +1651,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setColspan(9);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1292,7 +1666,7 @@ public class Serasa {
             tableSeparacao = new PdfPTable(1);
 			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -1305,7 +1679,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Protestos", fontCabecalhoDetalhe));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
 			cellCabecalho.setColspan(9);
@@ -1314,7 +1688,7 @@ public class Serasa {
 			cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColunaDetalhe);
@@ -1336,7 +1710,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1358,7 +1732,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1380,7 +1754,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1402,7 +1776,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1424,7 +1798,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setColspan(5);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1447,7 +1821,7 @@ public class Serasa {
 			cellCabecalho = new PdfPCell(new Phrase("Participação Societária", fontCabecalho));
 			cellCabecalho.setPaddingLeft(5f);
 			cellCabecalho.setBorderColor(colorBorder);
-			cellCabecalho.setMinimumHeight(30f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
 			cellCabecalho.setColspan(5);
@@ -1468,14 +1842,14 @@ public class Serasa {
 			tableLegenda.addCell(cellLegendaExclamacao);
 
 			cellLegendaExclamacao = new PdfPCell(imagemLegendaExclamacao);
-			cellCabecalho.setMinimumHeight(20f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellLegendaExclamacao.setBorder(0);
 			cellLegendaExclamacao.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellLegendaExclamacao.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tableLegenda.addCell(cellLegendaExclamacao);
 
 			cellLegendaExclamacao = new PdfPCell();
-			cellCabecalho.setMinimumHeight(20f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellLegendaExclamacao.setBorder(0);
 			cellLegendaExclamacao.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellLegendaExclamacao.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1485,7 +1859,7 @@ public class Serasa {
 
 			// COLUNA LEGENDA
 			cellCabecalho = new PdfPCell(tableLegenda);
-			cellCabecalho.setMinimumHeight(20f);
+			cellCabecalho.setMinimumHeight(25f);
 			cellCabecalho.setBorderColor(colorBorder);
 			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellCabecalho.setBackgroundColor(colorBackgroundLegenda);
@@ -1495,7 +1869,7 @@ public class Serasa {
 			cellTituloColuna = new PdfPCell();
 			cellTituloColuna.setPaddingLeft(5f);
 			cellTituloColuna.setBorderColor(colorBorder);
-			cellTituloColuna.setMinimumHeight(30f);
+			cellTituloColuna.setMinimumHeight(25f);
 			cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellTituloColuna.setBackgroundColor(colorBackgroundTituloColuna);
@@ -1522,7 +1896,7 @@ public class Serasa {
 
 			cellDadoColuna = new PdfPCell(tableLegendaMenor);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			tableParticipacaoSocietaria.addCell(cellDadoColuna);
@@ -1542,7 +1916,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1563,7 +1937,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);
@@ -1584,7 +1958,7 @@ public class Serasa {
 			cellDadoColuna = new PdfPCell();
 			cellDadoColuna.setPaddingLeft(5f);
 			cellDadoColuna.setBorderColor(colorBorder);
-			cellDadoColuna.setMinimumHeight(30f);
+			cellDadoColuna.setMinimumHeight(25f);
 			cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cellDadoColuna.setBackgroundColor(colorBackgroundDadoColunaZebra);
@@ -1608,7 +1982,7 @@ public class Serasa {
             tableSeparacao = new PdfPTable(1);
 			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
 			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(20f);
+			cellSeparacao.setMinimumHeight(25f);
 			tableSeparacao.addCell(cellSeparacao);
 			tableSeparacao.completeRow();
             document.add(tableSeparacao);
@@ -1622,14 +1996,14 @@ public class Serasa {
            cellCabecalho.setBorder(0);
            cellCabecalho.setPaddingLeft(5f);
            cellCabecalho.setBorderColor(colorBorder);
-           cellCabecalho.setMinimumHeight(30f);
+           cellCabecalho.setMinimumHeight(25f);
            cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
            cellCabecalho.setBackgroundColor(colorBackgroundCabecalho);
            cellCabecalho.setColspan(5);
            tableSerasaScore.addCell(cellCabecalho);
 
            cellTituloColuna = new PdfPCell();
-		   cellTituloColuna.setMinimumHeight(20f);
+		   cellTituloColuna.setMinimumHeight(25f);
 		   cellTituloColuna.setPhrase(new Phrase("", fontTituloColuna));
 		   cellTituloColuna.setColspan(5);
 	       cellTituloColuna.setBorder(0);
@@ -1803,47 +2177,6 @@ public class Serasa {
 
 			*/
 
-           document.newPage();
-
-           // Informacao geral.
-
-  			PdfPTable tableInformacoesGerais = new PdfPTable(1);
-  			tableInformacoesGerais.setWidthPercentage(100);
-  			String textoInformacoesGerais = "A decisão da aprovação ou não do crédito é de exclusiva responsabilidade do concedente. As informações prestadas pela Serasa Experian têm como objetivo subsidiar essas decisões e, em hipótese alguma, devem ser utilizadas como justificativa, pelo concedente do crédito, para a tomada da referida decisão.";
-  			cellCabecalho = new PdfPCell(new Phrase(textoInformacoesGerais, fontDadoColuna));
-  			cellCabecalho.setPadding(10f);
-  			cellCabecalho.setBorderColor(colorBorder);
-  			cellCabecalho.setMinimumHeight(30f);
-  			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
-  			cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
-  			tableInformacoesGerais.addCell(cellCabecalho);
-  			tableInformacoesGerais.completeRow();
-  			document.add(tableInformacoesGerais);
-
-  	         // Separação
-
-  			tableSeparacao = new PdfPTable(1);
-			cellSeparacao = new PdfPCell(new Phrase("", fontDadoColuna));
-			cellSeparacao.setBorder(PdfCell.NO_BORDER);
-			cellSeparacao.setMinimumHeight(670f);
-			tableSeparacao.addCell(cellSeparacao);
-			tableSeparacao.completeRow();
-            document.add(tableSeparacao);
-
-            // Rodapé
-
-            tableInformacoesGerais = new PdfPTable(1);
-			tableInformacoesGerais.setWidthPercentage(100);
-  			textoInformacoesGerais = "As informações acima, de uso exclusivo do destinatário, são protegidas por sigilo contratual. Sua utilização por outra pessoa, ou para finalidade diversa da contratada, caracteriza ilícito civil, tornando a prova inútil para o processo.";
-  			cellCabecalho = new PdfPCell(new Phrase(textoInformacoesGerais, fontDadoColuna));
-  			cellCabecalho.setPadding(10f);
-  			cellCabecalho.setBorder(0);
-  			cellCabecalho.setMinimumHeight(30f);
-  			cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
-  			cellCabecalho.setBackgroundColor(colorBackgroundDadoColuna);
-  			tableInformacoesGerais.addCell(cellCabecalho);
-  			tableInformacoesGerais.completeRow();
-  			document.add(tableInformacoesGerais);
 
 			/*
 			 * // Linha 6
@@ -1853,14 +2186,14 @@ public class Serasa {
 			 * tablePendenciasBancarias = new PdfPTable(7); cellCabecalho = new PdfPCell(new
 			 * Phrase("Pendências Bancárias", fontCabecalhoDetalhe));
 			 * cellCabecalho.setPaddingLeft(5f); cellCabecalho.setBorderColor(colorBorder);
-			 * cellCabecalho.setMinimumHeight(30f);
+			 * cellCabecalho.setMinimumHeight(25f);
 			 * cellCabecalho.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			 * cellCabecalho.setBackgroundColor(colorBackgroundCabecalhoDetalhe);
 			 * cellCabecalho.setColspan(7); tablePendenciasBancarias.addCell(cellCabecalho);
 			 *
 			 * cellTituloColuna = new PdfPCell(); cellTituloColuna.setPaddingLeft(5f);
 			 * cellTituloColuna.setBorderColor(colorBorder);
-			 * cellTituloColuna.setMinimumHeight(30f);
+			 * cellTituloColuna.setMinimumHeight(25f);
 			 * cellTituloColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			 * cellTituloColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			 * cellTituloColuna.setBackgroundColor(colorBackgroundTituloColunaDetalhe);
@@ -1881,7 +2214,7 @@ public class Serasa {
 			 *
 			 * cellDadoColuna = new PdfPCell(); cellDadoColuna.setPaddingLeft(5f);
 			 * cellDadoColuna.setBorderColor(colorBorder);
-			 * cellDadoColuna.setMinimumHeight(30f);
+			 * cellDadoColuna.setMinimumHeight(25f);
 			 * cellDadoColuna.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			 * cellDadoColuna.setHorizontalAlignment(Element.ALIGN_LEFT);
 			 * cellDadoColuna.setBackgroundColor(colorBackgroundDadoColuna);

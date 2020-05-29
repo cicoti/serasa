@@ -89,6 +89,8 @@ public class Util {
 
 	public String formataCNPJ(String cnpj) {
 
+		if(cnpj==null) return "-";
+
 		cnpj = cnpj.substring(1);
 
 		 return cnpj.replaceAll("([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{4})([0-9]{2})","$1\\.$2\\.$3/$4-$5");
@@ -147,6 +149,15 @@ public class Util {
 
 		return data;
 
+	}
+
+	public String formataDataResumoInicialFinal(String dataInicial,String dataFinal) throws ParseException  {
+
+		if(dataInicial == null && dataFinal == null) {
+			return "-";
+		}
+
+		return (formataDataResumo(dataInicial).concat(" a ").concat(formataDataResumo(dataFinal)));
 	}
 
 	public String formataDataResumo(String data) throws ParseException {
@@ -210,6 +221,7 @@ public class Util {
 		System.out.println(new Util().formataDataPadraoSerasa("31031966"));
 		System.out.println(new Util().formataDataPadrao("20181203"));
 		System.out.println(new Util().formataDataResumo("20181203"));
+		System.out.println(new Util().formataDataResumoInicialFinal("20181203", "20191203"));
 		System.out.println(new Util().formatarValorMonetario("000000000155601"));
 		System.out.println(new Util().formatarValorMonetario("100000000155601"));
 
